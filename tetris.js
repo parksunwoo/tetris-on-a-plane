@@ -34,6 +34,9 @@ var pieces =
     [0, 1, 1, 0],
     [0, 0, 0, 0]]];
 
+var curPiece = pieces[0], curPieceType = 0;
+var pieceColor = ["red", "orange", "yellow", "green", "blue", "indigo", "violet"];
+
 var KEY_ENTER = 13;
 var KEY_SPACE = 32;
 var KEY_LEFT = 37;
@@ -77,7 +80,7 @@ function apply_piece(rows, piece, y, x) {
   for (var i = 0; i < 4; i++)
     for (var j = 0; j < 4; j++)
       if (piece[i][j])
-        newRows[y+i][x+j] = 1;
+        newRows[y+i][x+j] = 1 + curPieceType;
   return newRows;
 }
 
@@ -104,7 +107,8 @@ function kill_rows(rows) {
 }
 
 function randomPiece() {
-  return pieces[Math.floor(Math.random() * pieces.length)];
+  curPieceType = Math.floor(Math.random() * pieces.length);
+  return pieces[curPieceType];
 }
 
 function TetrisGame() {
@@ -202,8 +206,10 @@ function draw_blocks(rows, num_rows, num_cols) {
     for (var j = 0; j < num_cols; j++) {
       var blockElem = document.createElement('div');
       blockElem.classList.add('tetrisBlock');
-      if (rows[i][j])
+      if (rows[i][j]){
         blockElem.classList.add('habitated');
+        blockElem.style.backgroundColor = pieceColor[rows[i][j]];
+      }
       blockElem.style.top = (i * BLOCK_HEIGHT) + 'px';
       blockElem.style.left = (j * BLOCK_WIDTH) + 'px';
       boardElem.appendChild(blockElem);
